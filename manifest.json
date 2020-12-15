@@ -1,0 +1,25 @@
+{
+  "manifest_version": 2,
+  "name": "RobinHoodExt",
+  "version": "0.1.0",
+  "description": "Util for Robin Hood.",  
+  "permissions": [
+    "notifications",
+    "storage",
+    "https://robinhood.com/account/history?type=orders",
+    "tabs"
+  ],
+  "content_scripts": [
+    {
+      "css": [
+        "styles.css"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "matches": [
+        "https://robinhood.com/account/history?type=orders"
+      ]
+    }
+  ]
+}
