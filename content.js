@@ -1,4 +1,4 @@
-var scrollToDate = async () => {
+const scrollToDate = async () => {
   let sections = document.querySelectorAll("[class*=rh-expandable-item]")
   let currentSection = sections[sections.length - 1];
   if (!currentSection) {
@@ -13,22 +13,21 @@ var scrollToDate = async () => {
     date.setFullYear(today.getFullYear())
   }
 
-  console.log(today.getFullYear(), date.getFullYear());
   if (date.getFullYear() === today.getFullYear()) {
     window.scrollTo(0, document.body.scrollHeight);
-    await new Promise((resolve) => setTimeout(resolve, 250));
+    await new Promise((resolve) => setTimeout(resolve, 50));
     await scrollToDate();
   }
 }
 
-var parse = () => {
+const parse = () => {
   let csv = "Name,Action,Amount\n";
-  let sections = document.querySelectorAll("[class*=rh-expandable-item]")
+  let sections = document.querySelectorAll("[class*=rh-expandable-item-header")
   let credit = 0;
   let debit = 0;
 
   let validActions = ["Buy", "Sell", "Expiration"]
-
+  console.log(sections.length);
   for (let i = 0; i < sections.length; i++) {
     const section = sections[i].querySelectorAll("h3");
     const transactionSection = section[0];
@@ -39,7 +38,7 @@ var parse = () => {
     }
 
     const transactionParts = transactionSection.innerText.split(" ");
-    const action = transactionParts[transactionParts.length - 1];
+    const action = transactionParts[transactionParts.length - 1].trim();
     const amount = parseFloat(priceSection.innerText.replace("$", ""));
     if (!validActions.includes(action) || !amount) {
       continue;
@@ -48,12 +47,14 @@ var parse = () => {
 
     const name = transactionParts.slice(0, transactionParts.length - 1).join(" ");
 
-    console.log(amount)
+    // console.log(name, amount, action)
     if (action == "Buy") {
       debit += amount;
     } else if (action == "Sell") {
       credit += amount;
     }
+
+    console.log(`Adding ${name},${action},${amount}\n`)
     csv += `${name},${action},${amount}\n`
   }
 
@@ -100,6 +101,7 @@ const addButton = () => {
 
   sideBar.appendChild(button);
 }
+
 
 (async () => {
   try {
